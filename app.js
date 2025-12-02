@@ -1,22 +1,14 @@
 import NarrativeModule from './modules/narrative.js';
-import CameraModule from './modules/camera.js';
-import AudioModule from './modules/audio.js';
-import SensorsModule from './modules/sensors.js';
+import MinigameModule from './modules/minigames.js';
 
 class App {
     constructor() {
         this.narrative = new NarrativeModule();
-        this.camera = new CameraModule();
-        this.audio = new AudioModule();
-        this.sensors = new SensorsModule();
+        this.minigames = new MinigameModule();
 
         this.state = {
             agentName: localStorage.getItem('agentName') || '',
-            currentEra: 'future', // 'past' or 'future'
-            progress: {
-                past: false,
-                future: false
-            }
+            currentEra: 'future'
         };
 
         this.views = {
@@ -33,16 +25,12 @@ class App {
         this.updateClock();
         setInterval(() => this.updateClock(), 1000);
 
-        // Event Listeners
         document.getElementById('btn-start-game').addEventListener('click', () => this.registerAgent());
-
         document.getElementById('btn-era-past').addEventListener('click', () => this.travelToEra('past'));
         document.getElementById('btn-era-future').addEventListener('click', () => this.travelToEra('future'));
-
         document.getElementById('btn-next-dialogue').addEventListener('click', () => this.advanceDialogue());
         document.getElementById('btn-back-timeline').addEventListener('click', () => this.switchView('timeline'));
 
-        // Check login
         if (this.state.agentName) {
             this.switchView('timeline');
         } else {
@@ -72,13 +60,10 @@ class App {
 
     travelToEra(era) {
         this.setTheme(era);
-        // Iniciar diálogo correspondiente a la era si es la primera vez
-        // Simplificado: Siempre inicia diálogo por ahora
         const dialogueId = era === 'past' ? 'past-1' : 'future-1';
         this.startDialogue(dialogueId);
     }
 
-    // --- LOGICA DE DIALOGO ---
     startDialogue(id) {
         this.switchView('dialogue');
         this.currentDialogueSequence = this.narrative.getDialogue(id);
@@ -87,8 +72,7 @@ class App {
     }
 
     showDialogueStep() {
-        if (this.dialogueIndex >= this.currentDialogueSequence.length) {
-            // Fin de secuencia
+        if (!this.currentDialogueSequence || this.dialogueIndex >= this.currentDialogueSequence.length) {
             this.switchView('timeline');
             return;
         }
@@ -100,34 +84,23 @@ class App {
         const optionsEl = document.getElementById('dialogue-options');
         const avatarEl = document.getElementById('char-avatar');
 
-        // Configurar Avatar
         if (step.char === 'CITLALI') avatarEl.innerText = '👵🏽';
         else if (step.char === 'NEO') avatarEl.innerText = '👨🏻‍💻';
         else avatarEl.innerText = '🤖';
 
         charEl.innerText = step.char;
-        textEl.innerText = '';
+        textEl.innerText = step.text; // Sin typewriter para legibilidad instantánea si se prefiere
+
         optionsEl.classList.add('hidden');
-        nextBtn.classList.add('hidden');
+        nextBtn.classList.remove('hidden');
 
-        // Efecto Typewriter
-        let i = 0;
-        const typeInterval = setInterval(() => {
-            textEl.innerText += step.text.charAt(i);
-            i++;
-            if (i >= step.text.length) {
-                clearInterval(typeInterval);
-
-                if (step.options) {
-                    this.showOptions(step.options);
-                } else if (step.action) {
-                    // Auto-ejecutar acción tras delay
-                    setTimeout(() => this.handleAction(step.action), 1000);
-                } else {
-                    nextBtn.classList.remove('hidden');
-                }
-            }
-        }, 30);
+        if (step.options) {
+            nextBtn.classList.add('hidden');
+            this.showOptions(step.options);
+        } else if (step.action) {
+            nextBtn.classList.add('hidden');
+            setTimeout(() => this.handleAction(step.action), 2000);
+        }
     }
 
     showOptions(options) {
@@ -137,10 +110,9 @@ class App {
 
         options.forEach(opt => {
             const btn = document.createElement('button');
-            btn.className = 'option-btn';
+            btn.className = 'btn btn-option';
             btn.innerText = `> ${opt.text}`;
             btn.onclick = () => {
-                // Cargar siguiente secuencia basada en la opción
                 this.currentDialogueSequence = this.narrative.getDialogue(opt.next);
                 this.dialogueIndex = 0;
                 this.showDialogueStep();
@@ -156,15 +128,25 @@ class App {
 
     handleAction(action) {
         if (action === 'start-mission-1') {
-            alert('MISIÓN INICIADA: EL SECRETO DEL LODO (Simulación)');
-            this.switchView('timeline');
+            this.startMinigame('mud-cleaning', 'LIMPIEZA DE CANALES');
         } else if (action === 'start-mission-2') {
-            alert('MISIÓN INICIADA: RECALIBRACIÓN (Simulación)');
-            this.switchView('timeline');
+            this.startMinigame('pipe-connect', 'CONEXIÓN DE TUBERÍAS');
         } else if (action === 'retry-future-1') {
-            alert('INTENTA DE NUEVO. PIENSA EN EL CICLO.');
             this.startDialogue('future-1');
         }
+    }
+
+    startMinigame(id, title) {
+        this.switchView('activity');
+        document.getElementById('activity-title').innerText = title;
+        const container = document.getElementById('activity-content');
+
+        this.minigames.start(id, container, (success) => {
+            if (success) {
+                alert('¡MISIÓN COMPLETADA!');
+                this.switchView('timeline');
+            }
+        });
     }
 
     switchView(viewName) {
@@ -175,7 +157,6 @@ class App {
 
         const target = this.views[viewName];
         target.classList.remove('hidden');
-        // Pequeño delay para la transición de opacidad
         setTimeout(() => target.classList.add('active'), 50);
     }
 }
