@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Eco-Sistema: Operación Acuaponía</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Overlay de Scanlines y efectos CRT -->
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+
+        <!-- Header / HUD Superior -->
+        <header class="hud-header">
+            <div class="status-bar">
+                <span id="connection-status" class="status-online">CONECTADO</span>
+                <span id="battery-level">BATT: 98%</span>
+                <span id="clock">00:00</span>
+            </div>
+            <h1 class="game-title">ECO-SISTEMA <span class="version">v1.0</span></h1>
+        </header>
+
+        <!-- Contenedor Principal de Vistas -->
+        <main id="main-container">
+            <!-- Vista: Inicio -->
+            <section id="view-home" class="view active">
+                <div class="logo-container">
+                    <div class="eco-circle"></div>
+                    <h2>INICIAR PROTOCOLO</h2>
+                </div>
+                <p class="mission-brief">
+                    AGENTE: El huerto acuapónico está inoperable.<br>
+                    TU MISIÓN: Reactivar el ecosistema.<br>
+                    HERRAMIENTAS: Smartphone + Libreta de Campo.
+                </p>
+                <button id="btn-start" class="cyber-button">ACCEDER AL SISTEMA</button>
+            </section>
+
+            <!-- Vista: Selector de Fases -->
+            <section id="view-phases" class="view hidden">
+                <h2>FASES DEL PROYECTO</h2>
+                <div class="phase-grid">
+                    <button class="phase-card locked" data-phase="1">
+                        <span class="phase-num">01</span>
+                        <span class="phase-name">DIAGNÓSTICO</span>
+                        <span class="phase-status">PENDIENTE</span>
+                    </button>
+                    <button class="phase-card locked" data-phase="2">
+                        <span class="phase-num">02</span>
+                        <span class="phase-name">DISEÑO</span>
+                        <span class="phase-status">BLOQUEADO</span>
+                    </button>
+                    <button class="phase-card locked" data-phase="3">
+                        <span class="phase-num">03</span>
+                        <span class="phase-name">ACCIÓN</span>
+                        <span class="phase-status">BLOQUEADO</span>
+                    </button>
+                    <button class="phase-card locked" data-phase="4">
+                        <span class="phase-num">04</span>
+                        <span class="phase-name">REFLEXIÓN</span>
+                        <span class="phase-status">BLOQUEADO</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Vista: Actividad Activa (Contenedor dinámico) -->
+            <section id="view-activity" class="view hidden">
+                <div class="activity-header">
+                    <button id="btn-back" class="back-arrow">← VOLVER</button>
+                    <h3 id="activity-title">ACTIVIDAD</h3>
+                </div>
+                
+                <div id="activity-content" class="activity-content">
+                    <!-- Aquí se inyectan los módulos (Cámara, Audio, Texto) -->
+                </div>
+
+                <div id="notebook-instruction" class="notebook-instruction hidden">
+                    <div class="icon-notebook">📒</div>
+                    <p>ACTIVIDAD EN LIBRETA REQUERIDA</p>
+                    <p id="notebook-text">Dibuja el esquema actual...</p>
+                    <button id="btn-verify-notebook" class="cyber-button small">VERIFICAR</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- HUD Inferior -->
+        <footer class="hud-footer">
+            <div class="sensor-readings">
+                <div class="reading">
+                    <span class="label">GYRO</span>
+                    <span id="gyro-val" class="value">0, 0, 0</span>
+                </div>
+                <div class="reading">
+                    <span class="label">AUDIO</span>
+                    <div class="audio-bar-container">
+                        <div id="audio-bar" class="audio-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
