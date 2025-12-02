@@ -4,169 +4,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Eco-Sistema: Operación Acuaponía</title>
+    <title>Raíces de Agua: El Ciclo Eterno</title>
     <link rel="stylesheet" href="style.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&family=Courier+Prime&display=swap"
         rel="stylesheet">
 </head>
 
-<body>
+<body class="theme-future"> <!-- Default Theme -->
     <div id="app">
-        <!-- Overlay de Scanlines y efectos CRT -->
         <div class="scanlines"></div>
-        <div class="vignette"></div>
 
-        <!-- Header / HUD Superior -->
+        <!-- Header -->
         <header class="hud-header">
-            <div class="status-bar">
-                <span id="connection-status" class="status-online">CONECTADO</span>
-                <span id="battery-level">BATT: 98%</span>
-                <span id="clock">00:00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h1 class="game-title">ECO-SISTEMA <span class="version">v2.5</span></h1>
-                <div id="xp-display" style="color: var(--color-primary); font-family: var(--font-display);">XP: 0</div>
-            </div>
+            <div class="game-title">RAÍCES DE AGUA</div>
+            <div id="clock" style="font-family: var(--font-display); color: var(--color-primary);">00:00</div>
         </header>
 
-        <!-- Contenedor Principal de Vistas -->
         <main id="main-container">
-            <!-- Vista: Registro -->
-            <section id="view-register" class="view hidden">
-                <div class="logo-container">
-                    <h2>IDENTIFICACIÓN</h2>
-                </div>
-                <p class="mission-brief">
-                    INGRESE SU NOMBRE DE AGENTE PARA INICIAR EL REGISTRO DE MISIÓN.
-                </p>
-                <input type="text" id="input-name" class="cyber-input" placeholder="NOMBRE DE AGENTE"
-                    autocomplete="off">
-                <button id="btn-register" class="cyber-button">REGISTRAR AGENTE</button>
-            </section>
+            <!-- VISTA: INTRO / REGISTRO -->
+            <section id="view-intro" class="view active">
+                <div style="text-align: center; margin-top: 50px;">
+                    <h1
+                        style="font-family: var(--font-display); color: var(--color-primary); font-size: 2rem; margin-bottom: 10px;">
+                        AGENCIA DE<br>EQUILIBRIO</h1>
+                    <p style="margin-bottom: 40px; opacity: 0.8;">ENLACE TEMPORAL REQUERIDO</p>
 
-            <!-- Vista: Inicio -->
-            <section id="view-home" class="view hidden">
-                <div class="logo-container">
-                    <div class="eco-circle"></div>
-                    <h2>HOLA, AGENTE <span id="agent-name-display"></span></h2>
-                </div>
-                <p class="mission-brief">
-                    ESTADO DEL HUERTO: CRÍTICO.<br>
-                    TU MISIÓN: Reactivar el ecosistema.<br>
-                    HERRAMIENTAS: Smartphone + Libreta.
-                </p>
-                <button id="btn-start" class="cyber-button">ACCEDER A FASES</button>
-                <button id="btn-profile" class="cyber-button small" style="margin-top: 10px;">VER PERFIL Y
-                    LOGROS</button>
-            </section>
-
-            <!-- Vista: Selector de Fases -->
-            <section id="view-phases" class="view hidden">
-                <div class="activity-header">
-                    <button id="btn-back-home" class="back-arrow">← INICIO</button>
-                    <h3>FASES DEL PROYECTO</h3>
-                </div>
-                <div class="phase-grid">
-                    <button class="phase-card locked" data-phase="1">
-                        <span class="phase-num">01</span>
-                        <span class="phase-name">QUÍMICA DEL AGUA</span>
-                        <span class="phase-status">PENDIENTE</span>
-                    </button>
-                    <button class="phase-card locked" data-phase="2">
-                        <span class="phase-num">02</span>
-                        <span class="phase-name">BIOLOGÍA DE PECES</span>
-                        <span class="phase-status">BLOQUEADO</span>
-                    </button>
-                    <button class="phase-card locked" data-phase="3">
-                        <span class="phase-num">03</span>
-                        <span class="phase-name">MANTENIMIENTO</span>
-                        <span class="phase-status">BLOQUEADO</span>
-                    </button>
-                    <button class="phase-card locked" data-phase="4">
-                        <span class="phase-num">04</span>
-                        <span class="phase-name">PROYECTO FINAL</span>
-                        <span class="phase-status">BLOQUEADO</span>
-                    </button>
+                    <input type="text" id="input-name" class="cyber-input" placeholder="NOMBRE DEL AGENTE"
+                        autocomplete="off">
+                    <button id="btn-start-game" class="cyber-button">INICIAR ENLACE</button>
                 </div>
             </section>
 
-            <!-- Vista: Actividad Activa -->
-            <section id="view-activity" class="view hidden">
-                <div class="activity-header">
-                    <button id="btn-back" class="back-arrow">← VOLVER</button>
-                    <h3 id="activity-title">ACTIVIDAD</h3>
-                </div>
+            <!-- VISTA: LÍNEA DE TIEMPO (SELECTOR) -->
+            <section id="view-timeline" class="view hidden">
+                <h2 style="text-align: center; margin-top: 20px; color: var(--color-primary);">SELECCIONA ERA</h2>
 
-                <div id="activity-content" class="activity-content">
-                    <!-- Inyección de módulos -->
-                </div>
+                <div class="timeline-container">
+                    <!-- ERA PASADO -->
+                    <div class="era-card" id="btn-era-past">
+                        <div class="era-title">1350: XOCHIMILCO</div>
+                        <div class="era-desc">Misión: El Secreto del Lodo</div>
+                        <div style="margin-top: 10px; font-size: 2rem;">🗿</div>
+                    </div>
 
-                <div id="notebook-instruction" class="notebook-instruction hidden">
-                    <div class="icon-notebook">📒</div>
-                    <p>ACTIVIDAD EN LIBRETA REQUERIDA</p>
-                    <p id="notebook-text">Dibuja el esquema actual...</p>
-                    <button id="btn-verify-notebook" class="cyber-button small">VERIFICAR Y GUARDAR</button>
-                </div>
-            </section>
+                    <!-- ERA FUTURO -->
+                    <div class="era-card" id="btn-era-future">
+                        <div class="era-title">2050: NEO-MÉXICO</div>
+                        <div class="era-desc">Misión: Alerta de Amoníaco</div>
+                        <div style="margin-top: 10px; font-size: 2rem;">🤖</div>
+                    </div>
 
-            <!-- Vista: Biblioteca (Nueva) -->
-            <section id="view-library" class="view hidden">
-                <div class="activity-header">
-                    <button id="btn-back-library" class="back-arrow">← VOLVER</button>
-                    <h3>BIBLIOTECA</h3>
-                </div>
-                <div id="library-content" class="library-content">
-                    <!-- Contenido inyectado -->
-                </div>
-                <button id="btn-finish-reading" class="cyber-button small" style="margin-top: 20px;">LECTURA
-                    COMPLETADA</button>
-            </section>
-
-            <!-- Vista: Perfil / Diploma -->
-            <section id="view-profile" class="view hidden">
-                <div class="activity-header">
-                    <button id="btn-back-profile" class="back-arrow">← VOLVER</button>
-                    <h3>PERFIL DE AGENTE</h3>
-                </div>
-
-                <div style="width: 100%; text-align: center;">
-                    <h2 id="profile-name">AGENTE X</h2>
-                    <p>NIVEL DE ACCESO: <span id="profile-level">1</span></p>
-                </div>
-
-                <div class="badge-grid" id="badge-container">
-                    <!-- Badges inyectados por JS -->
-                </div>
-
-                <div id="diploma-section" class="diploma-container hidden">
-                    <div class="diploma-title">CERTIFICADO DE EXCELENCIA</div>
-                    <p>SE OTORGA EL PRESENTE A:</p>
-                    <div class="diploma-name" id="diploma-name">NOMBRE</div>
-                    <p>POR COMPLETAR EXITOSAMENTE LA RECUPERACIÓN DEL ECOSISTEMA ACUAPÓNICO.</p>
-                    <p style="margin-top: 10px; font-size: 0.7rem;">FECHA: <span id="diploma-date"></span></p>
-                </div>
-            </section>
-        </main>
-
-        <!-- HUD Inferior -->
-        <footer class="hud-footer">
-            <div class="sensor-readings">
-                <div class="reading">
-                    <span class="label">GYRO</span>
-                    <span id="gyro-val" class="value">0, 0, 0</span>
-                </div>
-                <div class="reading">
-                    <span class="label">AUDIO</span>
-                    <div class="audio-bar-container">
-                        <div id="audio-bar" class="audio-bar"></div>
+                    <!-- CONVERGENCIA -->
+                    <div class="era-card" id="btn-era-final" style="opacity: 0.5; pointer-events: none;">
+                        <div class="era-title">CONVERGENCIA</div>
+                        <div class="era-desc">Bloqueado: Requiere completar misiones</div>
+                        <div style="margin-top: 10px; font-size: 2rem;">⚖️</div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </section>
+
+            <!-- VISTA: DIÁLOGO / NARRATIVA -->
+            <section id="view-dialogue" class="view hidden">
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                    <!-- Avatar o Visualización aquí -->
+                    <div id="char-avatar" style="font-size: 5rem;">🤖</div>
+                </div>
+
+                <div class="dialogue-box">
+                    <div id="dialogue-char" class="char-name">SYSTEM</div>
+                    <div id="dialogue-text" class="dialogue-text">...</div>
+
+                    <div id="dialogue-options" class="dialogue-options hidden">
+                        <!-- Botones inyectados por JS -->
+                    </div>
+
+                    <button id="btn-next-dialogue" class="cyber-button small"
+                        style="margin-top: 10px; width: 100%;">CONTINUAR</button>
+                </div>
+            </section>
+
+            <!-- VISTA: ACTIVIDAD (Genérica) -->
+            <section id="view-activity" class="view hidden">
+                <div
+                    style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button id="btn-back-timeline"
+                        style="background:none; border:none; color:var(--color-text); font-size:1.5rem;">←</button>
+                    <h3 id="activity-title" style="color: var(--color-primary);">ACTIVIDAD</h3>
+                    <div style="width: 24px;"></div>
+                </div>
+
+                <div id="activity-content" style="width: 100%; flex: 1;"></div>
+            </section>
+        </main>
     </div>
 
-    <!-- Scripts -->
     <script type="module" src="app.js"></script>
 </body>
 
