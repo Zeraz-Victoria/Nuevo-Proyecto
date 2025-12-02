@@ -4,99 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raíces de Agua: El Ciclo Eterno</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Operación Acua-Vida</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&family=Courier+Prime&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out forwards;
+        }
+    </style>
 </head>
 
-<body class="theme-future"> <!-- Default Theme -->
-    <div id="app">
-        <div class="scanlines"></div>
+<body class="bg-slate-950 text-white min-h-screen selection:bg-cyan-500 selection:text-white">
 
-        <!-- Header -->
-        <header class="hud-header">
-            <div class="game-title">RAÍCES DE AGUA</div>
-            <div id="clock" style="font-family: var(--font-display); color: var(--color-primary);">00:00</div>
-        </header>
-
-        <main id="main-container">
-            <!-- VISTA: INTRO / REGISTRO -->
-            <section id="view-intro" class="view active">
-                <div style="text-align: center; margin-top: 50px;">
-                    <h1
-                        style="font-family: var(--font-display); color: var(--color-primary); font-size: 2rem; margin-bottom: 10px;">
-                        AGENCIA DE<br>EQUILIBRIO</h1>
-                    <p style="margin-bottom: 40px; opacity: 0.8;">ENLACE TEMPORAL REQUERIDO</p>
-
-                    <input type="text" id="input-name" class="cyber-input" placeholder="NOMBRE DEL AGENTE"
-                        autocomplete="off">
-                    <button id="btn-start-game" class="cyber-button">INICIAR ENLACE</button>
-                </div>
-            </section>
-
-            <!-- VISTA: LÍNEA DE TIEMPO (SELECTOR) -->
-            <section id="view-timeline" class="view hidden">
-                <h2 style="text-align: center; margin-top: 20px; color: var(--color-primary);">SELECCIONA ERA</h2>
-
-                <div class="timeline-container">
-                    <!-- ERA PASADO -->
-                    <div class="era-card" id="btn-era-past">
-                        <div class="era-title">1350: XOCHIMILCO</div>
-                        <div class="era-desc">Misión: El Secreto del Lodo</div>
-                        <div style="margin-top: 10px; font-size: 2rem;">🗿</div>
-                    </div>
-
-                    <!-- ERA FUTURO -->
-                    <div class="era-card" id="btn-era-future">
-                        <div class="era-title">2050: NEO-MÉXICO</div>
-                        <div class="era-desc">Misión: Alerta de Amoníaco</div>
-                        <div style="margin-top: 10px; font-size: 2rem;">🤖</div>
-                    </div>
-
-                    <!-- CONVERGENCIA -->
-                    <div class="era-card" id="btn-era-final" style="opacity: 0.5; pointer-events: none;">
-                        <div class="era-title">CONVERGENCIA</div>
-                        <div class="era-desc">Bloqueado: Requiere completar misiones</div>
-                        <div style="margin-top: 10px; font-size: 2rem;">⚖️</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- VISTA: DIÁLOGO / NARRATIVA -->
-            <section id="view-dialogue" class="view hidden">
-                <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-                    <!-- Avatar o Visualización aquí -->
-                    <div id="char-avatar" style="font-size: 5rem;">🤖</div>
-                </div>
-
-                <div class="dialogue-box">
-                    <div id="dialogue-char" class="char-name">SYSTEM</div>
-                    <div id="dialogue-text" class="dialogue-text">...</div>
-
-                    <div id="dialogue-options" class="dialogue-options hidden">
-                        <!-- Botones inyectados por JS -->
-                    </div>
-
-                    <button id="btn-next-dialogue" class="cyber-button small"
-                        style="margin-top: 10px; width: 100%;">CONTINUAR</button>
-                </div>
-            </section>
-
-            <!-- VISTA: ACTIVIDAD (Genérica) -->
-            <section id="view-activity" class="view hidden">
-                <div
-                    style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <button id="btn-back-timeline"
-                        style="background:none; border:none; color:var(--color-text); font-size:1.5rem;">←</button>
-                    <h3 id="activity-title" style="color: var(--color-primary);">ACTIVIDAD</h3>
-                    <div style="width: 24px;"></div>
-                </div>
-
-                <div id="activity-content" style="width: 100%; flex: 1;"></div>
-            </section>
-        </main>
+    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col relative">
+        <!-- El contenido se inyectará aquí desde app.js -->
     </div>
 
     <script type="module" src="app.js"></script>
