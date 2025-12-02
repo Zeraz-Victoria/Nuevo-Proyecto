@@ -8,7 +8,11 @@ class App {
 
         this.state = {
             agentName: localStorage.getItem('agentName') || '',
-            currentEra: 'future'
+            currentEra: 'future',
+            progress: {
+                pastCompleted: localStorage.getItem('pastCompleted') === 'true',
+                futureCompleted: localStorage.getItem('futureCompleted') === 'true'
+            }
         };
 
         this.views = {
@@ -26,8 +30,17 @@ class App {
         setInterval(() => this.updateClock(), 1000);
 
         document.getElementById('btn-start-game').addEventListener('click', () => this.registerAgent());
-        document.getElementById('btn-era-past').addEventListener('click', () => this.travelToEra('past'));
-        document.getElementById('btn-era-future').addEventListener('click', () => this.travelToEra('future'));
+
+        // Botones de Era
+        this.btnPast = document.getElementById('btn-era-past');
+        this.btnFuture = document.getElementById('btn-era-future');
+        this.btnFinal = document.getElementById('btn-era-final');
+
+        this.btnPast.addEventListener('click', () => this.travelToEra('past'));
+        this.btnFuture.addEventListener('click', () => {
+            if (this.state.progress.pastCompleted) this.travelToEra('future');
+        });
+
         document.getElementById('btn-next-dialogue').addEventListener('click', () => this.advanceDialogue());
         document.getElementById('btn-back-timeline').addEventListener('click', () => this.switchView('timeline'));
 
@@ -41,6 +54,24 @@ class App {
     updateClock() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    updateTimelineUI() {
+        // Bloquear/Desbloquear según progreso
+        if (this.state.progress.pastCompleted) {
+            this.btnFuture.classList.remove('locked');
+            this.btnFuture.style.opacity = '1';
+            this.btnPast.innerHTML = '<div class="era-title">1350: XOCHIMILCO</div><div style="color:#0f0">¡MISIÓN COMPLETADA!</div>';
+        } else {
+            this.btnFuture.classList.add('locked');
+            this.btnFuture.innerHTML = '<div class="era-title">2050: BLOQUEADO</div><div>Completa el Pasado primero</div>';
+        }
+
+        if (this.state.progress.futureCompleted) {
+            this.btnFinal.classList.remove('locked');
+            this.btnFinal.style.opacity = '1';
+            this.btnFuture.innerHTML = '<div class="era-title">2050: NEO-MÉXICO</div><div style="color:#0f0">¡MISIÓN COMPLETADA!</div>';
+        }
     }
 
     registerAgent() {
@@ -89,7 +120,7 @@ class App {
         else avatarEl.innerText = '🤖';
 
         charEl.innerText = step.char;
-        textEl.innerText = step.text; // Sin typewriter para legibilidad instantánea si se prefiere
+        textEl.innerText = step.text;
 
         optionsEl.classList.add('hidden');
         nextBtn.classList.remove('hidden');
@@ -144,9 +175,20 @@ class App {
         this.minigames.start(id, container, (success) => {
             if (success) {
                 alert('¡MISIÓN COMPLETADA!');
-                this.switchView('timeline');
+                this.completeMission(id);
             }
         });
+    }
+
+    completeMission(gameId) {
+        if (gameId === 'mud-cleaning') {
+            this.state.progress.pastCompleted = true;
+            localStorage.setItem('pastCompleted', 'true');
+        } else if (gameId === 'pipe-connect') {
+            this.state.progress.futureCompleted = true;
+            localStorage.setItem('futureCompleted', 'true');
+        }
+        this.switchView('timeline');
     }
 
     switchView(viewName) {
@@ -157,6 +199,15 @@ class App {
 
         const target = this.views[viewName];
         target.classList.remove('hidden');
+
+        if (viewName === 'timeline') {
+            this.updateTimelineUI();
+            // Reset theme to default/future for menu
+            if (!this.state.progress.pastCompleted) {
+                this.setTheme('future');
+            }
+        }
+
         setTimeout(() => target.classList.add('active'), 50);
     }
 }

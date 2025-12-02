@@ -4,46 +4,33 @@
     --color-primary: #00ff41;
     --color-secondary: #008f11;
     --color-text: #ffffff;
-    /* Texto blanco puro para contraste */
     --color-accent: #003b00;
     --font-main: 'Rajdhani', sans-serif;
     --font-display: 'Orbitron', sans-serif;
-    --glass-bg: rgba(0, 0, 0, 0.85);
-    /* Fondo más oscuro para legibilidad */
+    --glass-bg: rgba(0, 0, 0, 0.9);
     --border-style: solid;
     --border-width: 2px;
     --border-radius: 8px;
     --bg-image: radial-gradient(circle at center, #0a140a 0%, #000000 100%);
 }
 
-/* TEMA: PASADO (Ancestral) */
+/* TEMA: PASADO */
 body.theme-past {
     --color-bg: #3e2723;
     --color-primary: #ffc107;
-    /* Ámbar brillante */
     --color-secondary: #8d6e63;
-    --color-text: #ffffff;
-    --color-accent: #1b0000;
-    --font-main: 'Courier Prime', monospace;
-    --font-display: 'Courier Prime', monospace;
     --glass-bg: rgba(62, 39, 35, 0.95);
-    /* Casi opaco para leer bien */
     --border-style: dashed;
     --border-width: 3px;
     --bg-image: repeating-linear-gradient(45deg, #3e2723, #3e2723 10px, #4e342e 10px, #4e342e 20px);
 }
 
-/* TEMA: FUTURO (Cyberpunk) */
+/* TEMA: FUTURO */
 body.theme-future {
     --color-bg: #000000;
     --color-primary: #00e5ff;
-    /* Cian brillante */
     --color-secondary: #006064;
-    --color-text: #ffffff;
-    --color-accent: #001219;
-    --font-main: 'Rajdhani', sans-serif;
-    --font-display: 'Orbitron', sans-serif;
-    --glass-bg: rgba(0, 20, 40, 0.9);
+    --glass-bg: rgba(0, 20, 40, 0.95);
     --border-style: solid;
     --border-width: 2px;
     --bg-image: linear-gradient(0deg, #000000 0%, #002233 100%);
@@ -65,7 +52,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.5s ease;
 }
 
 #app {
@@ -80,35 +66,22 @@ body {
     border: var(--border-width) var(--border-style) var(--color-primary);
 }
 
-/* Textos Legibles */
-h1,
-h2,
-h3,
-h4 {
-    text-shadow: 2px 2px 0px #000;
-    /* Sombra dura para contraste */
-}
-
-p,
-span,
-div {
-    text-shadow: 1px 1px 0px #000;
-}
-
 /* HUD Header */
 .hud-header {
-    padding: 15px;
+    padding: 10px 15px;
     background: var(--glass-bg);
     border-bottom: var(--border-width) var(--border-style) var(--color-primary);
     z-index: 10;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
+    /* No encoger */
 }
 
 .game-title {
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--color-primary);
     font-weight: bold;
 }
@@ -118,40 +91,33 @@ div {
     flex: 1;
     position: relative;
     overflow-y: auto;
-    padding: 20px;
-    padding-bottom: 80px;
+    /* Permitir scroll vertical si el contenido es largo */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .view {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
-    transition: opacity 0.3s ease;
+    width: 100%;
+    min-height: 100%;
+    /* Asegurar que ocupe todo el alto */
 }
 
 .view.hidden {
     display: none;
-    opacity: 0;
 }
 
-.view.active {
-    display: flex;
-    opacity: 1;
-}
-
-/* Cards & Containers */
-.card {
+/* Cards */
+.era-card {
     background: var(--glass-bg);
     border: var(--border-width) var(--border-style) var(--color-primary);
     padding: 20px;
     border-radius: var(--border-radius);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     width: 100%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-}
-
-.era-card {
     cursor: pointer;
     text-align: center;
     transition: transform 0.2s;
@@ -161,65 +127,81 @@ div {
     transform: scale(0.98);
 }
 
-.era-title {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    color: var(--color-primary);
-    margin-bottom: 5px;
+.era-card.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+    pointer-events: none;
+    border-color: #666;
 }
 
-/* Dialogue Box */
+/* Dialogue Box - FIX OVERFLOW */
 .dialogue-box {
     background: var(--glass-bg);
     border: var(--border-width) var(--border-style) var(--color-primary);
-    padding: 20px;
+    padding: 15px;
     border-radius: var(--border-radius);
     width: 100%;
     margin-top: auto;
-    margin-bottom: 20px;
-    min-height: 180px;
+    /* Empujar al fondo */
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 50%;
+    /* No ocupar más de la mitad de la pantalla */
 }
 
 .char-name {
     color: var(--color-primary);
     font-family: var(--font-display);
     font-weight: bold;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    font-size: 1rem;
+    margin-bottom: 5px;
     border-bottom: 1px solid var(--color-secondary);
     padding-bottom: 5px;
+    flex-shrink: 0;
 }
 
 .dialogue-text {
-    font-size: 1.1rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.4;
+    overflow-y: auto;
+    /* Scroll si el texto es muy largo */
+    flex: 1;
+    padding-right: 5px;
+    /* Espacio para scrollbar */
+    word-wrap: break-word;
+    /* Romper palabras largas */
 }
 
-/* Buttons */
+/* Options Container */
+.dialogue-options {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
 .btn {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     border: var(--border-width) var(--border-style) var(--color-primary);
     color: var(--color-primary);
-    padding: 15px;
+    padding: 12px;
     width: 100%;
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    margin-top: 10px;
     border-radius: var(--border-radius);
     text-transform: uppercase;
     font-weight: bold;
+    white-space: normal;
+    /* Permitir texto en varias líneas */
+    word-wrap: break-word;
 }
 
 .btn:active {
     background: var(--color-primary);
     color: #000;
-}
-
-.btn-option {
-    text-align: left;
-    margin-top: 8px;
-    font-size: 0.9rem;
 }
 
 /* Minigames */
@@ -228,4 +210,18 @@ canvas {
     background: #000;
     max-width: 100%;
     touch-action: none;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Inputs */
+.cyber-input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--color-primary);
+    color: #fff;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    text-align: center;
 }
