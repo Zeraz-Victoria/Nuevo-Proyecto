@@ -11,19 +11,48 @@ class App {
         this.sensors = new SensorsModule();
 
         this.views = {
+            register: document.getElementById('view-register'),
             home: document.getElementById('view-home'),
             phases: document.getElementById('view-phases'),
-            activity: document.getElementById('view-activity')
+            activity: document.getElementById('view-activity'),
+            profile: document.getElementById('view-profile')
         };
 
         this.init();
     }
 
     init() {
+        // Verificar usuario
+        const savedName = localStorage.getItem('eco_agent_name');
+        if (savedName) {
+            this.setAgentName(savedName);
+            this.switchView('home');
+        } else {
+            this.switchView('register');
+        }
+
         // Event Listeners Globales
+        document.getElementById('btn-register').addEventListener('click', () => {
+            const name = document.getElementById('input-name').value.trim();
+            if (name) {
+                localStorage.setItem('eco_agent_name', name);
+                this.setAgentName(name);
+                this.audio.playSuccess();
+                this.switchView('home');
+            } else {
+                this.audio.playError();
+            }
+        });
+
         document.getElementById('btn-start').addEventListener('click', () => {
             this.audio.playClick();
             this.switchView('phases');
+        });
+
+        document.getElementById('btn-profile').addEventListener('click', () => {
+            this.audio.playClick();
+            this.game.updateProfileUI();
+            this.switchView('profile');
         });
 
         document.getElementById('btn-back').addEventListener('click', () => {
@@ -32,30 +61,48 @@ class App {
             this.switchView('phases');
         });
 
+        document.getElementById('btn-back-home').addEventListener('click', () => {
+            this.audio.playClick();
+            this.switchView('home');
+        });
+
+        document.getElementById('btn-back-profile').addEventListener('click', () => {
+            this.audio.playClick();
+            this.switchView('home');
+        });
+
         // Inicializar reloj
         setInterval(() => {
             const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }, 1000);
 
-        // Inicializar sensores globales (batería, orientación básica para UI)
+        // Inicializar sensores globales
         this.sensors.initGlobalSensors();
-        
-        console.log('Eco-Sistema Iniciado');
+
+        // Cargar progreso guardado
+        this.game.loadProgress();
+
+        console.log('Eco-Sistema v2.0 Iniciado');
+    }
+
+    setAgentName(name) {
+        document.getElementById('agent-name-display').innerText = name;
+        document.getElementById('profile-name').innerText = `AGENTE ${name.toUpperCase()}`;
+        document.getElementById('diploma-name').innerText = name.toUpperCase();
     }
 
     switchView(viewName) {
-        // Ocultar todas
         Object.values(this.views).forEach(el => {
-            el.classList.add('hidden');
-            el.classList.remove('active');
+            if (el) {
+                el.classList.add('hidden');
+                el.classList.remove('active');
+            }
         });
 
-        // Mostrar target
         const target = this.views[viewName];
         if (target) {
             target.classList.remove('hidden');
-            // Pequeño delay para la transición de opacidad
             setTimeout(() => target.classList.add('active'), 50);
         }
     }
@@ -64,11 +111,10 @@ class App {
         this.camera.stop();
         this.audio.stopVisualization();
         this.sensors.stopLevelGame();
-        document.getElementById('activity-content').innerHTML = ''; // Limpiar contenedor
+        document.getElementById('activity-content').innerHTML = '';
         document.getElementById('notebook-instruction').classList.add('hidden');
     }
 
-    // Método para cargar una actividad específica
     loadActivity(type, config) {
         this.switchView('activity');
         const container = document.getElementById('activity-content');
@@ -82,15 +128,14 @@ class App {
             this.sensors.startLevelGame(container);
         }
 
-        // Si requiere libreta
         if (config.notebook) {
             const nb = document.getElementById('notebook-instruction');
             nb.classList.remove('hidden');
             document.getElementById('notebook-text').innerText = config.notebookText;
-            
+
             document.getElementById('btn-verify-notebook').onclick = () => {
                 this.audio.playSuccess();
-                alert('ACTIVIDAD VERIFICADA. DATOS REGISTRADOS.');
+                alert('ACTIVIDAD VERIFICADA. DATOS GUARDADOS EN DISPOSITIVO.');
                 this.game.completeCurrentPhase();
                 this.stopActiveModules();
                 this.switchView('phases');
@@ -99,7 +144,6 @@ class App {
     }
 }
 
-// Iniciar App cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new App();
 });

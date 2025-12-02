@@ -1,6 +1,7 @@
 :root {
     --color-bg: #050a05;
-    --color-primary: #00ff41; /* Verde Hacker */
+    --color-primary: #00ff41;
+    /* Verde Hacker */
     --color-secondary: #008f11;
     --color-accent: #003b00;
     --color-alert: #ff3333;
@@ -15,7 +16,8 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    user-select: none; /* Evitar selección de texto en app */
+    user-select: none;
+    /* Evitar selección de texto en app */
 }
 
 body {
@@ -23,6 +25,8 @@ body {
     color: var(--color-text);
     font-family: var(--font-main);
     height: 100vh;
+    height: 100dvh;
+    /* Soporte para navegadores móviles modernos */
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -32,7 +36,8 @@ body {
 #app {
     width: 100%;
     height: 100%;
-    max-width: 480px; /* Simulación móvil en desktop */
+    max-width: 480px;
+    /* Simulación móvil en desktop */
     position: relative;
     background: radial-gradient(circle at center, #0a140a 0%, #000000 100%);
     display: flex;
@@ -47,13 +52,11 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0),
-        rgba(255,255,255,0) 50%,
-        rgba(0,0,0,0.2) 50%,
-        rgba(0,0,0,0.2)
-    );
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0) 50%,
+            rgba(0, 0, 0, 0.2) 50%,
+            rgba(0, 0, 0, 0.2));
     background-size: 100% 4px;
     pointer-events: none;
     z-index: 100;
@@ -66,7 +69,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.8) 100%);
+    background: radial-gradient(circle, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.8) 100%);
     pointer-events: none;
     z-index: 101;
 }
@@ -114,6 +117,9 @@ body {
     position: relative;
     overflow-y: auto;
     padding: 20px;
+    padding-bottom: 80px;
+    /* Espacio extra para evitar que el footer tape contenido */
+    -webkit-overflow-scrolling: touch;
 }
 
 .view {
@@ -340,13 +346,25 @@ body {
 
 /* Animations */
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
 }
 
 @keyframes rotate {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 /* Modules Specific Styles */
@@ -388,4 +406,82 @@ video.camera-feed {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+/* Inputs & Forms */
+.cyber-input {
+    background: rgba(0, 20, 0, 0.8);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: 10px;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+    outline: none;
+}
+
+.cyber-input:focus {
+    box-shadow: 0 0 10px var(--color-primary);
+}
+
+/* Badges & Diploma */
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.badge {
+    background: rgba(0, 20, 0, 0.5);
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: center;
+    opacity: 0.5;
+    filter: grayscale(1);
+    transition: all 0.3s;
+}
+
+.badge.unlocked {
+    opacity: 1;
+    filter: grayscale(0);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px var(--color-secondary);
+}
+
+.badge-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.badge-name {
+    font-size: 0.8rem;
+    color: var(--color-text);
+}
+
+.diploma-container {
+    border: 4px double var(--color-primary);
+    padding: 20px;
+    margin-top: 20px;
+    background: rgba(0, 20, 0, 0.9);
+    text-align: center;
+}
+
+.diploma-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.diploma-name {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #fff;
+    text-shadow: 0 0 10px #fff;
 }
