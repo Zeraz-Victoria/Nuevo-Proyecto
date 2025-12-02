@@ -25,14 +25,14 @@
                 <span id="clock">00:00</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h1 class="game-title">ECO-SISTEMA <span class="version">v2.0</span></h1>
+                <h1 class="game-title">ECO-SISTEMA <span class="version">v2.5</span></h1>
                 <div id="xp-display" style="color: var(--color-primary); font-family: var(--font-display);">XP: 0</div>
             </div>
         </header>
 
         <!-- Contenedor Principal de Vistas -->
         <main id="main-container">
-            <!-- Vista: Registro (Nueva) -->
+            <!-- Vista: Registro -->
             <section id="view-register" class="view hidden">
                 <div class="logo-container">
                     <h2>IDENTIFICACIÓN</h2>
@@ -70,22 +70,22 @@
                 <div class="phase-grid">
                     <button class="phase-card locked" data-phase="1">
                         <span class="phase-num">01</span>
-                        <span class="phase-name">DIAGNÓSTICO</span>
+                        <span class="phase-name">QUÍMICA DEL AGUA</span>
                         <span class="phase-status">PENDIENTE</span>
                     </button>
                     <button class="phase-card locked" data-phase="2">
                         <span class="phase-num">02</span>
-                        <span class="phase-name">DISEÑO</span>
+                        <span class="phase-name">BIOLOGÍA DE PECES</span>
                         <span class="phase-status">BLOQUEADO</span>
                     </button>
                     <button class="phase-card locked" data-phase="3">
                         <span class="phase-num">03</span>
-                        <span class="phase-name">ACCIÓN</span>
+                        <span class="phase-name">MANTENIMIENTO</span>
                         <span class="phase-status">BLOQUEADO</span>
                     </button>
                     <button class="phase-card locked" data-phase="4">
                         <span class="phase-num">04</span>
-                        <span class="phase-name">REFLEXIÓN</span>
+                        <span class="phase-name">PROYECTO FINAL</span>
                         <span class="phase-status">BLOQUEADO</span>
                     </button>
                 </div>
@@ -110,7 +110,20 @@
                 </div>
             </section>
 
-            <!-- Vista: Perfil / Diploma (Nueva) -->
+            <!-- Vista: Biblioteca (Nueva) -->
+            <section id="view-library" class="view hidden">
+                <div class="activity-header">
+                    <button id="btn-back-library" class="back-arrow">← VOLVER</button>
+                    <h3>BIBLIOTECA</h3>
+                </div>
+                <div id="library-content" class="library-content">
+                    <!-- Contenido inyectado -->
+                </div>
+                <button id="btn-finish-reading" class="cyber-button small" style="margin-top: 20px;">LECTURA
+                    COMPLETADA</button>
+            </section>
+
+            <!-- Vista: Perfil / Diploma -->
             <section id="view-profile" class="view hidden">
                 <div class="activity-header">
                     <button id="btn-back-profile" class="back-arrow">← VOLVER</button>

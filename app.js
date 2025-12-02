@@ -2,6 +2,8 @@ import Game from './modules/game.js';
 import CameraModule from './modules/camera.js';
 import AudioModule from './modules/audio.js';
 import SensorsModule from './modules/sensors.js';
+import LibraryModule from './modules/library.js';
+import QuizModule from './modules/quiz.js';
 
 class App {
     constructor() {
@@ -9,13 +11,16 @@ class App {
         this.camera = new CameraModule();
         this.audio = new AudioModule();
         this.sensors = new SensorsModule();
+        this.library = new LibraryModule();
+        this.quiz = new QuizModule();
 
         this.views = {
             register: document.getElementById('view-register'),
             home: document.getElementById('view-home'),
             phases: document.getElementById('view-phases'),
             activity: document.getElementById('view-activity'),
-            profile: document.getElementById('view-profile')
+            profile: document.getElementById('view-profile'),
+            library: document.getElementById('view-library')
         };
 
         this.init();
@@ -71,6 +76,11 @@ class App {
             this.switchView('home');
         });
 
+        document.getElementById('btn-back-library').addEventListener('click', () => {
+            this.audio.playClick();
+            this.switchView('phases');
+        });
+
         // Inicializar reloj
         setInterval(() => {
             const now = new Date();
@@ -83,7 +93,7 @@ class App {
         // Cargar progreso guardado
         this.game.loadProgress();
 
-        console.log('Eco-Sistema v2.0 Iniciado');
+        console.log('Eco-Sistema v2.5 Iniciado');
     }
 
     setAgentName(name) {
@@ -126,6 +136,21 @@ class App {
             this.audio.startVisualization(container);
         } else if (type === 'gyro') {
             this.sensors.startLevelGame(container);
+        } else if (type === 'quiz') {
+            this.quiz.startQuiz(config.quizId, container, (passed) => {
+                if (passed) {
+                    this.audio.playSuccess();
+                    alert('EVALUACIÓN APROBADA. FASE COMPLETADA.');
+                    this.game.completeCurrentPhase();
+                    this.stopActiveModules();
+                    this.switchView('phases');
+                } else {
+                    this.audio.playError();
+                    alert('EVALUACIÓN FALLIDA. DEBES REPASAR LA LECTURA.');
+                    this.stopActiveModules();
+                    this.switchView('phases');
+                }
+            });
         }
 
         if (config.notebook) {
@@ -135,12 +160,28 @@ class App {
 
             document.getElementById('btn-verify-notebook').onclick = () => {
                 this.audio.playSuccess();
-                alert('ACTIVIDAD VERIFICADA. DATOS GUARDADOS EN DISPOSITIVO.');
+                alert('ACTIVIDAD VERIFICADA. DATOS GUARDADOS.');
+                // Si es un paso intermedio (lectura), no completa fase, solo desbloquea siguiente paso
+                // Pero en esta versión simplificada, asumimos que notebook es el paso final o único
                 this.game.completeCurrentPhase();
                 this.stopActiveModules();
                 this.switchView('phases');
             };
         }
+    }
+
+    loadLibrary(contentId, onFinish) {
+        this.switchView('library');
+        const content = this.library.getContent(contentId);
+        document.getElementById('library-content').innerHTML = `
+            <h3>${content.title}</h3>
+            ${content.text}
+        `;
+
+        document.getElementById('btn-finish-reading').onclick = () => {
+            this.audio.playSuccess();
+            onFinish();
+        };
     }
 }
 
